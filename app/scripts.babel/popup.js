@@ -6,6 +6,28 @@
   let blacklistedWords = [];
   let blacklistedMap = {};
 
+  function initialize() {
+    console.log('Initialized!');
+    blacklistedWords = loadWordsFromStorage();
+    blacklistedMap = {}; // createBlackListMap();
+    let tabs = [];
+    updateBlackListMap();
+    // Broadcast to main extension.
+    broadcastWords();
+
+    blacklistWord('test');
+    blacklistWord('curvin');
+    blacklistWord('dog');
+
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if(request.command === 'update') {
+        sendResponse({blackListedWords: blacklistedWords});
+      }
+    });
+
+    broadcastWords();
+  }
+
   function broadcastWords() {
     console.log('Broadcasting to tabs.');
     chrome.tabs.query({active: true, currentWindow: true, url:'*://twitter.com/*'}, (tabs) => {
@@ -80,22 +102,7 @@
     localStorage['twittermute.blacklist'] = blacklistedWords;
   }
 
-  blacklistedWords = loadWordsFromStorage();
-  blacklistedMap = {}; // createBlackListMap();
-  let tabs = [];
-  updateBlackListMap();
-  // Broadcast to main extension.
-  broadcastWords();
-
-  blacklistWord('test');
-  blacklistWord('curvin');
-  blacklistWord('dog');
-
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if(request.command === 'update') {
-      sendResponse({blackListedWords: blacklistedWords});
-    }
-  });
+  initialize();
 })();
 
 

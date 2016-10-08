@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 // Watch Tweet Bar event for checking when the View More Tweets button is
 // clicked.
@@ -7,6 +7,8 @@
 
 // Globals for banned words? Load from a JavaScript object/setting/localStorage
 // in the future.
+
+'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -90,4 +92,6 @@ var TwitterPage = (function () {
 
 var page = new TwitterPage();
 console.log(page);
+console.log('JQuery!');
+console.log($);
 //# sourceMappingURL=contentscript.js.map

@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 // Watch Tweet Bar event for checking when the View More Tweets button is
 // clicked.

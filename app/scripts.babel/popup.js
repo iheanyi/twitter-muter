@@ -1,7 +1,5 @@
 //'use strict';
 
-//import Blacklist from './blacklist';
-
 (function() {
   let blacklistedWords = [];
   let blacklistedMap = {};
@@ -23,9 +21,34 @@
       if(request.command === 'update') {
         sendResponse({blackListedWords: blacklistedWords});
       }
+
+      if(request.command === 'debug') {
+        console.log(request);
+        console.log(sendResponse({gucci: 'bandana'}));
+      }
     });
 
     broadcastWords();
+    let app = new Vue({
+      el: '#app',
+      data: {
+        blacklistedWords: blacklistedWords,
+        bannedWord: ''
+      },
+      methods: {
+        addWord: function() {
+          console.log('Adding a new banned word: ' + this.bannedWord);
+          blacklistWord(this.bannedWord);
+          // Reset input.
+          this.bannedWord = '';
+          updateLocalStorage();
+        },
+        removeWord: function(index) {
+          blacklistedWords.splice(index, 1);
+          updateLocalStorage();
+        }
+      }
+    });
   }
 
   function broadcastWords() {
@@ -102,8 +125,8 @@
     localStorage['twittermute.blacklist'] = blacklistedWords;
   }
 
-  initialize();
+  document.addEventListener('DOMContentLoaded', function () {
+    initialize();
+  });
+
 })();
-
-
-//export default Popup;

@@ -16,6 +16,13 @@
 
   function initialize() {
     getMatchingTweets();
+    /*chrome.runtime.sendMessage({command: 'debug', items: blacklistedWords}, (response) => {
+      console.log('Debugging');
+      console.log(response);
+      });*/
+
+    console.log(localStorage);
+    loadWordsFromLocalStorage();
   }
 
   function createBlackListMap() {
@@ -26,6 +33,19 @@
     });
 
     return map;
+  }
+
+  function loadWordsFromLocalStorage() {
+    var words = localStorage['twittermute.blacklist'] || [];
+    if (!(words instanceof Array)) {
+      console.log('Debugging words from local storage.');
+      console.log(words);
+      console.log(typeof words);
+      console.log(words instanceof Array);
+      words = words.split(',');
+    }
+    console.log(words);
+    return words;
   }
 
   // Initialize list of banned words

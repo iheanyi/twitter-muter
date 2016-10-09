@@ -44,10 +44,12 @@
           // Reset input.
           this.bannedWord = '';
           updateLocalStorage();
+          broadcastWords();
         },
         removeWord: function removeWord(index) {
           blacklistedWords.splice(index, 1);
           updateLocalStorage();
+          broadcastWords();
         }
       }
     });

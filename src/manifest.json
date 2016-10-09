@@ -1,0 +1,49 @@
+{
+  "name": "twitter-muter-revamp",
+  "version": "0.0.4",
+  "manifest_version": 2,
+  "description": "__MSG_appDescription__",
+  "icons": {
+    "16": "images/icon-16.png",
+    "128": "images/icon-128.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "background/index.js"
+    ]
+  },
+  "permissions": [
+    "tabs"
+  ],
+  "browser_action": {
+    "default_icon": {
+      "19": "images/icon-19.png",
+      "38": "images/icon-38.png"
+    },
+    "default_title": "Twitter Muter",
+    "default_popup": "popup/index.html"
+  },
+  "_options_page": "options.html",
+  "_options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
+  "omnibox": {
+    "keyword": "Twitter Muter"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://twitter.com/*",
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "content/index.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://cdnjs.cloudflare.com* https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"
+}

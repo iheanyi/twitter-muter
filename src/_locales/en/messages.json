@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Twitter Muter",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "An extension for easily removing or hiding tweets in your timeline with a certain hashtag or keywords. ",
+    "description": "The description of the application"
+  }
+}

@@ -3,6 +3,7 @@ import Vue from 'vue';
 import App from './App.vue'
 //import App from './App';
 import store from './store/index';
+import 'tachyons';
 
 require('file?name=manifest.json!../manifest.json');
 require('file?name=icon-38.png!./images/icon-38.png');

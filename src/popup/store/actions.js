@@ -1,7 +1,16 @@
-export const addWord = ({ dispatch }) => {
-  dispatch('ADD_WORD');
+import * as types from './mutation-types';
+
+export const addWord = ({ commit }, word) => {
+  console.log(commit);
+  console.log("Adding word!");
+  console.log(word);
+  commit(types.ADD_WORD, {
+    word: word
+  });
 };
 
-export const removeWord = ({ dispatch }) => {
-  dispatch('REMOVE_WORD");')
+export const removeWord = ({ commit }, word) => {
+  commit(types.REMOVE_WORD, {
+    word: word
+  });
 };

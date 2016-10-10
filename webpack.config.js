@@ -33,11 +33,10 @@ module.exports = {
           name: '[name].[ext]?[hash]'
         }
       },
-      /*{
-        test: /\.json$/,
-        loader: 'json',
-        exclude: /node_modules/
-        }*/
+      {
+        test: /.css$/,
+        loader: 'style-loader!css-loader'
+      }
     ]
   },
   resolve: {

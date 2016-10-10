@@ -28,7 +28,7 @@ export default (function() {
     });
 
     broadcastWords();
-    let app = new Vue({
+    /* let app = new Vue({
       el: '#app',
       data: {
         blacklistedWords: blacklistedWords,
@@ -47,7 +47,7 @@ export default (function() {
           updateLocalStorage();
         }
       }
-    });
+      });*/
   }
 
   function broadcastWords() {

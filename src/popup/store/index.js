@@ -20,22 +20,44 @@ const state = {
   blacklistedWords: loadWordsFromStorage()
 };
 
+function broadcastWords() {
+  console.log('Broadcasting to tabs.');
+  chrome.tabs.query({active: true, currentWindow: true, url:'*://twitter.com/*'}, (tabs) => {
+    tabs.forEach((tab) => {
+
+      chrome.tabs.sendMessage(tab.id, {blacklistedWords: state.blacklistedWords}, function(response) {
+        console.log('In the Chrome broadcast.');
+        console.log(response);
+        if(response && response.status) {
+          console.log('Status response received');
+          console.log(response.status);
+          console.log(response);
+        } 
+      });
+    });
+  });
+}
+
 // Possible mutations that can be applied to the state
 const mutations = {
   ADD_WORD(state, { word }) {
     const blacklistedWords = [...state.blacklistedWords];
     let newWords;
 
-    if(~blacklistedWords.indexOf(word)) {
-      newWords = blacklistedWords;
-    } else {
+    if(blacklistedWords.indexOf(word) === -1) {
       newWords = [
         ...blacklistedWords,
         word
       ];
+    } else {
+      newWords = blacklistedWords;
     }
 
+    console.log(newWords);
+
     state.blacklistedWords = newWords;
+
+    localStorage['twittermute.blacklist'] = newWords;
   },
   REMOVE_WORD(state, { word }) {
     const blacklistedWords = [...state.blacklistedWords];
@@ -45,9 +67,12 @@ const mutations = {
     });
 
     state.blacklistedWords = newWords;
+
+    localStorage['twittermute.blacklist'] = newWords;
   }
 };
 
+broadcastWords();
 export default new Vuex.Store({
   state,
   mutations,

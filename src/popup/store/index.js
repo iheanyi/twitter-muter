@@ -25,7 +25,10 @@ function broadcastWords() {
   chrome.tabs.query({active: true, currentWindow: true, url:'*://twitter.com/*'}, (tabs) => {
     tabs.forEach((tab) => {
 
-      chrome.tabs.sendMessage(tab.id, {blacklistedWords: state.blacklistedWords}, function(response) {
+      chrome.tabs.sendMessage(tab.id, {
+        command: 'updateWords',
+        blacklistedWords: state.blacklistedWords}, 
+        (response) => {
         console.log('In the Chrome broadcast.');
         console.log(response);
         if(response && response.status) {
@@ -58,6 +61,7 @@ const mutations = {
     state.blacklistedWords = newWords;
 
     localStorage['twittermute.blacklist'] = newWords;
+    broadcastWords();
   },
   REMOVE_WORD(state, { word }) {
     const blacklistedWords = [...state.blacklistedWords];
@@ -69,10 +73,12 @@ const mutations = {
     state.blacklistedWords = newWords;
 
     localStorage['twittermute.blacklist'] = newWords;
+    broadcastWords();
   }
 };
 
 broadcastWords();
+
 export default new Vuex.Store({
   state,
   mutations,

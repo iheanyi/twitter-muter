@@ -8,6 +8,14 @@ import "./styles.css";
     getMatchingTweets();
 
     loadWordsFromLocalStorage();
+
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.command === 'updateWords') {
+        blacklistedWords = request.blacklistedWords;
+        getMatchingTweets();
+        sendResponse({status: "Updated!", blacklistedWords: blacklistedWords});
+      }
+    });
   }
 
   function createBlackListMap() {
@@ -28,8 +36,8 @@ import "./styles.css";
       console.log(typeof words);
       console.log(words instanceof Array);
       words = words.split(',');
-
     }
+
     console.log(words);
     return words;
   }
@@ -91,5 +99,6 @@ import "./styles.css";
     });
 
     console.log("init called!");
+
     initialize();
 })();

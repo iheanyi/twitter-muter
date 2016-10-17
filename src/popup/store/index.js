@@ -28,8 +28,6 @@ function broadcastWords() {
         command: 'updateWords',
         blacklistedWords: state.blacklistedWords}, 
         (response) => {
-          console.log('In the Chrome broadcast.');
-          console.log(response);
           if(response && response.status) {
             console.log('Status response received');
             console.log(response.status);
@@ -55,14 +53,11 @@ const mutations = {
       newWords = blacklistedWords;
     }
 
-    console.log(newWords);
-
     state.blacklistedWords = newWords;
 
     localStorage['twittermute.blacklist'] = newWords;
     broadcastWords();
     chrome.storage.sync.set({'twitterBlacklist': newWords}, () => {
-      console.log("In the sync function!");
     });
   },
   REMOVE_WORD(state, { word }) {
@@ -77,7 +72,6 @@ const mutations = {
     localStorage['twittermute.blacklist'] = newWords;
     broadcastWords();
     chrome.storage.sync.set({'twitterBlacklist': newWords}, () => {
-      console.log("In the sync function!");
     });
   },
   LOAD_INITIAL(state, { items }) {

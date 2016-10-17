@@ -79,6 +79,12 @@ const mutations = {
     chrome.storage.sync.set({'twitterBlacklist': newWords}, () => {
       console.log("In the sync function!");
     });
+  },
+  LOAD_INITIAL(state) {
+    chrome.storage.get('twitterBlacklist', (items) => {
+      console.log(items);
+      state.blacklistedWords = items;
+    });
   }
 };
 

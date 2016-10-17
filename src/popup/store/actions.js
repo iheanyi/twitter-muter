@@ -11,3 +11,7 @@ export const removeWord = ({ commit }, word) => {
     word: word
   });
 };
+
+export const loadInitial = ({ commit }) => {
+  commit(types.LOAD_INITIAL);
+};

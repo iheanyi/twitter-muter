@@ -1,7 +1,5 @@
 import Vue from 'vue';
-//import 'tachyons';
 import App from './App.vue'
-//import App from './App';
 import store from './store/index';
 import 'tachyons';
 

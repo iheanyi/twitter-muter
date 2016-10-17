@@ -5,16 +5,17 @@ import "./styles.css";
   let blacklistedMap = {};
 
   function initialize() {
-    getMatchingTweets();
-
-    loadWordsFromLocalStorage();
-
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request.command === 'updateWords') {
         blacklistedWords = request.blacklistedWords;
         getMatchingTweets();
         sendResponse({status: "Updated!", blacklistedWords: blacklistedWords});
       }
+    });
+
+    chrome.storage.sync.get('twitterBlacklist', ({ twitterBlacklist: items }) => {
+      blacklistedWords = items;
+      getMatchingTweets();
     });
   }
 

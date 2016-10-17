@@ -20,7 +20,6 @@ import "./styles.css";
 
   function createBlackListMap() {
     var map = {};
-    console.log(blacklistedWords);
     blacklistedWords.forEach(function(word) {
       map[word] = true;
     });
@@ -31,14 +30,9 @@ import "./styles.css";
   function loadWordsFromLocalStorage() {
     var words = localStorage['twittermute.blacklist'] || [];
     if(!(words instanceof Array)) {
-      console.log('Debugging words from local storage.');
-      console.log(words);
-      console.log(typeof words);
-      console.log(words instanceof Array);
       words = words.split(',');
     }
 
-    console.log(words);
     return words;
   }
 

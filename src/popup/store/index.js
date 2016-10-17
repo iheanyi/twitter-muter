@@ -24,7 +24,6 @@ function broadcastWords() {
   console.log('Broadcasting to tabs.');
   chrome.tabs.query({active: true, currentWindow: true, url:'*://twitter.com/*'}, (tabs) => {
     tabs.forEach((tab) => {
-
       chrome.tabs.sendMessage(tab.id, {
         command: 'updateWords',
         blacklistedWords: state.blacklistedWords}, 
@@ -62,6 +61,9 @@ const mutations = {
 
     localStorage['twittermute.blacklist'] = newWords;
     broadcastWords();
+    chrome.storage.sync.set({'twitterBlacklist': newWords}, () => {
+      console.log("In the sync function!");
+    });
   },
   REMOVE_WORD(state, { word }) {
     const blacklistedWords = [...state.blacklistedWords];

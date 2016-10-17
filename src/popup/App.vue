@@ -9,11 +9,16 @@
 <script>
   import WordList from './components/WordList.vue';
   import AddWord from './components/AddWord.vue';
+  import {  mapActions } from 'vuex';
 
   export default {
     components: {
       WordList,
       AddWord
+    },
+    methods: mapActions(['loadInitial']),
+    created() {
+      this.loadInitial();
     }
   }
 </script>

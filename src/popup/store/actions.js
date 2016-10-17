@@ -13,5 +13,9 @@ export const removeWord = ({ commit }, word) => {
 };
 
 export const loadInitial = ({ commit }) => {
-  commit(types.LOAD_INITIAL);
+  chrome.storage.sync.get('twitterBlacklist', ({ twitterBlacklist: items }) => {
+    commit(types.LOAD_INITIAL, {
+      items
+    });
+  });
 };

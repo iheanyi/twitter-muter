@@ -1,11 +1,13 @@
 var path = require('path')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var LiveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = {
   entry: {
     popup: './src/popup/main.js',
-    content: './src/content/index.js'
+    content: './src/content/index.js',
+    background: './src/background/index.js'
   },
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -69,6 +71,7 @@ if (process.env.NODE_ENV === 'production') {
       filename: 'popup.html',
       template: './src/popup.template.html',
       inject: false
-    })
+    }),
+    new LiveReloadPlugin()
   ])
 }

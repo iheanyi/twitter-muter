@@ -18,7 +18,6 @@ import "./styles.css";
       getMatchingTweets();
     });
 
-    console.log("Setting up mutations.");
     let target = document.getElementById('stream-items-id');
 
     let observer = new MutationObserver(function(mutations) {
@@ -87,8 +86,6 @@ import "./styles.css";
 
   // Tab send info on load.
   chrome.runtime.sendMessage({command: 'update'}, (response) => {
-    console.log('Asking for an update');
-    console.log(response);
     if(response && response.blackListedWords) {  
       blacklistedWords = response.blackListedWords;
     }
@@ -96,16 +93,13 @@ import "./styles.css";
 
   chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
-      console.log('Message received!');
       if (request.blacklistedWords) {
-        console.log('Updated response!');
         blacklistedWords = request.blacklistedWords;
         getMatchingTweets();
         sendResponse({status: 'Updated!', words: blacklistedWords});
       }
     });
 
-    console.log("init called!");
 
     initialize();
 })();

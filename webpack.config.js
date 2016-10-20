@@ -3,6 +3,14 @@ var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var LiveReloadPlugin = require('webpack-livereload-plugin');
 
+browser = process.env.BROWSER;
+
+if (browser === 'chrome') {
+  outputPath = __dirname + '/build/' + browser;
+} else {
+  outputPath = path.resolve(__dirname, './dist');
+}
+
 module.exports = {
   entry: {
     popup: './src/popup/main.js',
@@ -10,7 +18,7 @@ module.exports = {
     background: './src/background/index.js'
   },
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: outputPath,
     publicPath: '/dist/',
     filename: '[name].js'
   },

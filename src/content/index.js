@@ -17,6 +17,16 @@ import "./styles.css";
       blacklistedWords = items;
       getMatchingTweets();
     });
+
+    console.log("Setting up mutations.");
+    let target = document.getElementById('stream-items-id');
+
+    let observer = new MutationObserver(function(mutations) {
+      getMatchingTweets();
+    });
+
+    const config = { childList: true };
+    observer.observe(target, config);
   }
 
   function createBlackListMap() {
@@ -41,11 +51,13 @@ import "./styles.css";
   function getMatchingTweets() {
     var tweets = document.querySelectorAll('.tweet-text');
     [].forEach.call(tweets, (tweet) => {
-      var textContent = tweet.textContent.toLowerCase(); // Lowercase everything.
+      // Lowercase everything.
+      var textContent = tweet.textContent.toLowerCase();
+      
       // Hardcoded problems to test against my own timeline, will be updated in the
       // future.
       blacklistedWords.forEach((word) => {
-        if (textContent.indexOf(word.toLowerCase()) > 0) {
+        if (textContent.indexOf(word.toLowerCase()) !== -1) {
           hideTweet(tweet);
         }
       });

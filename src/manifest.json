@@ -1,13 +1,13 @@
 {
-  "name": "twitter-muter-revamp",
-  "version": "0.0.4",
   "manifest_version": 2,
-  "description": "__MSG_appDescription__ Test",
+  "name": "__MSG_extName__",
+  "version": "0.0.4",
+  "description": "__MSG_extDescription__",
   "icons": {
     "16": "icon-16.png",
     "128": "icon-128.png"
   },
-  "_default_locale": "en",
+  "default_locale": "en",
   "background": {
     "scripts": [
       "background.js"
@@ -23,7 +23,7 @@
       "19": "icon-19.png",
       "38": "icon-38.png"
     },
-    "default_title": "Twitter Muter",
+    "default_title": "__MSG_extName__",
     "default_popup": "popup.html"
   },
   "_options_page": "options.html",
@@ -46,6 +46,5 @@
       "run_at": "document_end",
       "all_frames": false
     }
-  ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'"
+  ]
 }

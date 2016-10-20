@@ -79,7 +79,6 @@ if (process.env.NODE_ENV === 'production') {
       filename: 'popup.html',
       template: './src/popup.template.html',
       inject: false
-    }),
-    new LiveReloadPlugin()
+    })
   ])
 }

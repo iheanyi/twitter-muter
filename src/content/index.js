@@ -53,7 +53,7 @@ import "./styles.css";
     [].forEach.call(tweets, (tweet) => {
       // Lowercase everything.
       var textContent = tweet.textContent.toLowerCase();
-      
+
       // Hardcoded problems to test against my own timeline, will be updated in the
       // future.
       blacklistedWords.forEach((word) => {

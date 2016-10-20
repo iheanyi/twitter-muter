@@ -21,7 +21,6 @@ const state = {
 };
 
 function broadcastWords() {
-  console.log('Broadcasting to tabs.');
   chrome.tabs.query({active: true, currentWindow: true, url:'*://twitter.com/*'}, (tabs) => {
     tabs.forEach((tab) => {
       chrome.tabs.sendMessage(tab.id, {

@@ -14,7 +14,7 @@ import "./styles.css";
     });
 
     chrome.storage.sync.get('twitterBlacklist', ({ twitterBlacklist: items }) => {
-      blacklistedWords = items;
+      blacklistedWords = items || [];
       getMatchingTweets();
     });
 
@@ -99,7 +99,6 @@ import "./styles.css";
         sendResponse({status: 'Updated!', words: blacklistedWords});
       }
     });
-
 
     initialize();
 })();

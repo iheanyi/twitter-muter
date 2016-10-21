@@ -1,12 +1,5 @@
-node_modules
-temp
-.tmp
-.swp
-dist
-.sass-cache
-app/bower_components
-test/bower_components
-package
-scripts/*.js
-scripts/*.map
-
+.DS_Store
+node_modules/
+dist/
+build/
+npm-debug.log

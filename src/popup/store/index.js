@@ -16,7 +16,7 @@ function loadWordsFromStorage() {
 }
 
 // The initial state object
-const state = {
+let state = {
   blacklistedWords: loadWordsFromStorage()
 };
 
@@ -28,7 +28,6 @@ function broadcastWords() {
         blacklistedWords: state.blacklistedWords}, 
         (response) => {
           if(response && response.status) {
-            console.log('Status response received');
             console.log(response.status);
             console.log(response);
           } 
@@ -40,7 +39,8 @@ function broadcastWords() {
 // Possible mutations that can be applied to the state
 const mutations = {
   ADD_WORD(state, { word }) {
-    const blacklistedWords = [...state.blacklistedWords];
+    const wordsState = state.blacklistedWords || [];
+    const blacklistedWords = [...wordsState];
     let newWords;
 
     if(blacklistedWords.indexOf(word) === -1) {
@@ -63,7 +63,7 @@ const mutations = {
     const blacklistedWords = [...state.blacklistedWords];
 
     const newWords =  blacklistedWords.filter((item) => {
-      return item.toLowerCase() !== word.toLowerCase();
+      return item !== word;
     });
 
     state.blacklistedWords = newWords;

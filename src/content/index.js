@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import "./styles.css";
 
 (function() {
@@ -57,7 +58,8 @@ import "./styles.css";
       // future.
       blacklistedWords.forEach((word) => {
         if (textContent.indexOf(word.toLowerCase()) !== -1) {
-          hideTweet(tweet);
+          var tweetContainer = fetchTweetContainer(tweet);
+          hideTweet(tweetContainer);
         }
       });
     });
@@ -68,14 +70,8 @@ import "./styles.css";
   }
 
   function hideTweet(tweet) {
-    // Text Content Tweet.
-    let tweetContainer = fetchTweetContainer(tweet);
-    let tweetClass = tweetContainer.className.trim('\n');
-    let hiddenTweetClass = tweetClass + ' hide-element';
-
-    tweetContainer.className = hiddenTweetClass; 
+    $(tweet).addClass('hide-element');
   }
-
 
   let numberHiddenTweets = 0;
   let matchingTweets = [];

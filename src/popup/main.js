@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue'
 import store from './store/index';
 import 'tachyons';
+import 'css-cursors';
 
 require('file?name=_locales/en/messages.json!../_locales/en/messages.json');
 require('file?name=manifest.json!../manifest.json');

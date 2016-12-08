@@ -51,7 +51,8 @@ module.exports = {
   },
   resolve: {
     alias: {
-      vue: 'vue/dist/vue.js'
+      vue: 'vue/dist/vue.js',
+      'css-cursors': 'css-cursors/css/cursors.css'
     }
   },
   devServer: {

@@ -1,9 +1,10 @@
 <template>
   <div class="db mb2 cf w-100">
-    <input class="pa2 fl w-80" v-model="inputWord" placeholder="Input word or
-    phrase you want to block." />
-    <button v-on:click="addWord" class="pv2 ph1 w-10 bg-blue white fr ba bw1
-    b--blue">+</button>
+    <form class="flex" @submit.prevent="addWord">
+      <input class="pa2 fl mr2 w-80" v-model="inputWord" 
+      placeholder="Enter word/hashtag/username you want to block." />
+      <button type='submit' @click="addWord" class="cursor-pointer f6 bold
+      content-end pv2 ph1 w2 pa2 bg-blue white ba bw1 btn b--blue">+</button>
   </div>
 </template>
 

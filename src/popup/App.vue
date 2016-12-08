@@ -1,6 +1,6 @@
 <template>
   <div class="db mb2">
-    <h1>Add Words</h1>
+    <h1>Banned Words</h1>
     <word-list></word-list>
     <add-word></add-word>
   </div>

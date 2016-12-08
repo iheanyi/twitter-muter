@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="overflow-auto">
     <ul class="list pl0">
       <li class="mb2 flex" v-for="(word, index) in bannedWords">
         <span class="w-100 f6 mr1 pv2 dib">{{word}}</span>

@@ -26,7 +26,11 @@ import "./styles.css";
     });
 
     const config = { childList: true };
-    observer.observe(target, config);
+
+    if (!!target) {
+      observer.observe(target, config);
+    }
+
   }
 
   function createBlackListMap() {
@@ -96,5 +100,7 @@ import "./styles.css";
       }
     });
 
-    initialize();
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      initialize();
+    }
 })();

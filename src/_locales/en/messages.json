@@ -1,10 +1,10 @@
 {
   "extName": {
-    "message": "Twitter Muter",
-    "description": "The name of the extlication"
+    "message": "Social Muter",
+    "description": "An extension for easily hiding content from your Twitter timeline."
   },
   "extDescription": {
     "message": "An extension for easily removing or hiding tweets in your timeline with a certain hashtag or keywords. ",
-    "description": "The description of the extlication"
+    "description": "An extension for easily hiding tweets from your timeline based on keywords or phrases"
   }
 }

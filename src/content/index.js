@@ -27,10 +27,7 @@ import "./styles.css";
 
     const config = { childList: true };
 
-    if (!!target) {
-      observer.observe(target, config);
-    }
-
+    observer.observe(target, config);
   }
 
   function createBlackListMap() {

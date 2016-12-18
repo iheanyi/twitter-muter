@@ -1,135 +1,134 @@
+//'use strict';
+
 'use strict';
 
-//import Blacklist from './blacklist';
+(function () {
+  var blacklistedWords = [];
+  var blacklistedMap = {};
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-console.log('Before popup created.');
-
-var Popup = (function () {
-  function Popup() {
-    var _this = this;
-
-    _classCallCheck(this, Popup);
-
-    this.blacklistedWords = this.loadWordsFromStorage();
-    this.blacklistMap = {}; // this.createBlackListMap();
-    this.updateBlackListMap();
-
+  function initialize() {
+    console.log('Initialized!');
+    blacklistedWords = loadWordsFromStorage();
+    blacklistedMap = {}; // createBlackListMap();
+    var tabs = [];
+    updateBlackListMap();
     // Broadcast to main extension.
-    this.broadcastWords();
+    broadcastWords();
 
-    this.blacklistWord('test');
-    this.blacklistWord('curvin');
-    this.tabs = [];
-
-    console.log('Successfully created popup!');
+    blacklistWord('test');
+    blacklistWord('curvin');
+    blacklistWord('dog');
 
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-      console.log('Heard command!');
       if (request.command === 'update') {
-        console.log('Broadcast sent');
-        sendResponse({ blackListedWords: _this.blacklistedWords });
+        sendResponse({ blackListedWords: blacklistedWords });
       }
 
-      if (request.tab) {
-        // Swag
+      if (request.command === 'debug') {
+        console.log(request);
+        console.log(sendResponse({ gucci: 'bandana' }));
+      }
+    });
+
+    broadcastWords();
+    var app = new Vue({
+      el: '#app',
+      data: {
+        blacklistedWords: blacklistedWords,
+        bannedWord: ''
+      },
+      methods: {
+        addWord: function addWord() {
+          console.log('Adding a new banned word: ' + this.bannedWord);
+          blacklistWord(this.bannedWord);
+          // Reset input.
+          this.bannedWord = '';
+          updateLocalStorage();
+          broadcastWords();
+        },
+        removeWord: function removeWord(index) {
+          blacklistedWords.splice(index, 1);
+          updateLocalStorage();
+          broadcastWords();
+        }
       }
     });
   }
 
-  _createClass(Popup, [{
-    key: 'broadcastWords',
-    value: function broadcastWords() {
-      var _this2 = this;
+  function broadcastWords() {
+    console.log('Broadcasting to tabs.');
+    chrome.tabs.query({ active: true, currentWindow: true, url: '*://twitter.com/*' }, function (tabs) {
+      tabs.forEach(function (tab) {
 
-      console.log('Broadcasting to tabs.');
-      chrome.tabs.query({ active: true, currentWindow: true, url: '*://twitter.com/*' }, function (tabs) {
-        tabs.forEach(function (tab) {
-
-          chrome.tabs.sendMessage(tab.id, { blacklistedWords: _this2.blacklistedWords }, function (response) {
-            if (response && response.status) {
-              console.log('Status response received');
-              console.log(response.status);
-              console.log(response);
-            }
-          });
+        chrome.tabs.sendMessage(tab.id, { blacklistedWords: blacklistedWords }, function (response) {
+          console.log('In the Chrome broadcast.');
+          console.log(response);
+          if (response && response.status) {
+            console.log('Status response received');
+            console.log(response.status);
+            console.log(response);
+          }
         });
       });
+    });
+  }
 
-      /*chrome.runtime.sendMessage({blacklistedWords: this.blacklistedWords}, function(response) {
-        console.log(response.status);
-        });*/
-    }
-  }, {
-    key: 'updateBlackListMap',
-    value: function updateBlackListMap() {
-      this.blacklistMap = this.createBlackListMap();
-    }
-  }, {
-    key: 'createBlackListMap',
-    value: function createBlackListMap() {
-      var map = {};
-      console.log(this.blacklistedWords);
-      this.blacklistedWords.forEach(function (word) {
-        map[word] = true;
-      });
+  function updateBlackListMap() {
+    blacklistedMap = createBlackListMap();
+  }
 
-      return map;
-    }
-  }, {
-    key: 'loadWordsFromStorage',
-    value: function loadWordsFromStorage() {
-      var words = localStorage['twittermute.blacklist'] || [];
-      if (!(words instanceof Array)) {
-        console.log(words);
-        console.log(typeof words);
-        console.log(words instanceof Array);
-        words = words.split(',');
-      }
+  function createBlackListMap() {
+    var map = {};
+    console.log(blacklistedWords);
+    blacklistedWords.forEach(function (word) {
+      map[word] = true;
+    });
+
+    return map;
+  }
+
+  function loadWordsFromStorage() {
+    var words = localStorage['twittermute.blacklist'] || [];
+    if (!(words instanceof Array)) {
       console.log(words);
-      return words;
+      console.log(typeof words);
+      console.log(words instanceof Array);
+      words = words.split(',');
     }
-  }, {
-    key: 'blacklistWord',
-    value: function blacklistWord(word) {
-      if (!localStorage['twittermute.blacklist']) {
-        localStorage['twittermute.blacklist'] = this.blacklistedWords; // if undefined, set to our currently blacklisted words.
-      }
+    console.log(words);
+    return words;
+  }
 
-      var lcWord = word.toLowerCase();
-      if (!this.blacklistMap[lcWord]) {
-        this.blacklistedWords.push(word.toLowerCase());
-      }
-
-      this.updateLocalStorage();
+  function blacklistWord(word) {
+    if (!localStorage['twittermute.blacklist']) {
+      localStorage['twittermute.blacklist'] = blacklistedWords; // if undefined, set to our currently blacklisted words.
     }
-  }, {
-    key: 'whitelistWord',
-    value: function whitelistWord(word) {
-      var lcWord = word.toLowerCase();
-      var newArray = this.blacklistedWords.filter(function (item) {
-        return item.toLowerCase() !== lcWord;
-      });
 
-      delete this.blacklistMap[lcWord]; // Remove key from the Map.
-      this.blacklistedWords = newArray;
-      this.updateLocalStorage();
+    var lcWord = word.toLowerCase();
+    if (!blacklistedMap[lcWord]) {
+      blacklistedWords.push(word.toLowerCase());
     }
-  }, {
-    key: 'updateLocalStorage',
-    value: function updateLocalStorage() {
-      localStorage['twittermute.blacklist'] = this.blacklistedWords;
-    }
-  }]);
 
-  return Popup;
+    updateLocalStorage();
+  }
+
+  function whitelistWord(word) {
+    var lcWord = word.toLowerCase();
+    var newArray = blacklistedWords.filter(function (item) {
+      return item.toLowerCase() !== lcWord;
+    });
+
+    delete blacklistedMap[lcWord]; // Remove key from the Map.
+    blacklistedWords = newArray;
+    updateLocalStorage();
+  }
+
+  function updateLocalStorage() {
+    localStorage['twittermute.blacklist'] = blacklistedWords;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initialize();
+  });
 })();
-
-console.log(chrome.tabs);
-var popup = new Popup();
-
-//export default Popup;
 //# sourceMappingURL=popup.js.map

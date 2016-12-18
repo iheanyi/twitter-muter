@@ -1,32 +1,37 @@
-//'use strict';
-
-// Watch Tweet Bar event for checking when the View More Tweets button is
-// clicked.
-
-
-//var moreTweetsBar = document.querySelectorAll('.new-tweets-bar')[0];
-
-// Globals for banned words? Load from a JavaScript object/setting/localStorage
-// in the future.
+import $ from 'jquery';
+import "./styles.css";
 
 (function() {
-  let blacklistedWords = ['LinkedIn'];
+  let blacklistedWords = [];
   let blacklistedMap = {};
 
   function initialize() {
-    getMatchingTweets();
-    /*chrome.runtime.sendMessage({command: 'debug', items: blacklistedWords}, (response) => {
-      console.log('Debugging');
-      console.log(response);
-      });*/
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.command === 'updateWords') {
+        blacklistedWords = request.blacklistedWords;
+        getMatchingTweets();
+        sendResponse({status: "Updated!", blacklistedWords: blacklistedWords});
+      }
+    });
 
-    console.log(localStorage);
-    loadWordsFromLocalStorage();
+    chrome.storage.sync.get('twitterBlacklist', ({ twitterBlacklist: items }) => {
+      blacklistedWords = items || [];
+      getMatchingTweets();
+    });
+
+    let target = document.getElementById('stream-items-id');
+
+    let observer = new MutationObserver(function(mutations) {
+      getMatchingTweets();
+    });
+
+    const config = { childList: true };
+
+    observer.observe(target, config);
   }
 
   function createBlackListMap() {
     var map = {};
-    console.log(blacklistedWords);
     blacklistedWords.forEach(function(word) {
       map[word] = true;
     });
@@ -37,14 +42,9 @@
   function loadWordsFromLocalStorage() {
     var words = localStorage['twittermute.blacklist'] || [];
     if(!(words instanceof Array)) {
-      console.log('Debugging words from local storage.');
-      console.log(words);
-      console.log(typeof words);
-      console.log(words instanceof Array);
       words = words.split(',');
-
     }
-    console.log(words);
+
     return words;
   }
 
@@ -52,12 +52,15 @@
   function getMatchingTweets() {
     var tweets = document.querySelectorAll('.tweet-text');
     [].forEach.call(tweets, (tweet) => {
-      var textContent = tweet.textContent.toLowerCase(); // Lowercase everything.
+      // Lowercase everything.
+      var textContent = tweet.textContent.toLowerCase();
+
       // Hardcoded problems to test against my own timeline, will be updated in the
       // future.
       blacklistedWords.forEach((word) => {
-        if (textContent.indexOf(word.toLowerCase()) > 0) {
-          hideTweet(tweet);
+        if (textContent.indexOf(word.toLowerCase()) !== -1) {
+          var tweetContainer = fetchTweetContainer(tweet);
+          hideTweet(tweetContainer);
         }
       });
     });
@@ -68,14 +71,8 @@
   }
 
   function hideTweet(tweet) {
-    // Text Content Tweet.
-    let tweetContainer = fetchTweetContainer(tweet);
-    let tweetClass = tweetContainer.className.trim('\n');
-    let hiddenTweetClass = tweetClass + ' hide-element';
-
-    tweetContainer.className = hiddenTweetClass; 
+    $(tweet).addClass('hide-element');
   }
-
 
   let numberHiddenTweets = 0;
   let matchingTweets = [];
@@ -86,8 +83,6 @@
 
   // Tab send info on load.
   chrome.runtime.sendMessage({command: 'update'}, (response) => {
-    console.log('Asking for an update');
-    console.log(response);
     if(response && response.blackListedWords) {  
       blacklistedWords = response.blackListedWords;
     }
@@ -95,14 +90,14 @@
 
   chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
-      console.log('Message received!');
       if (request.blacklistedWords) {
-        console.log('Updated response!');
         blacklistedWords = request.blacklistedWords;
         getMatchingTweets();
         sendResponse({status: 'Updated!', words: blacklistedWords});
       }
     });
 
-    initialize();
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      initialize();
+    }
 })();

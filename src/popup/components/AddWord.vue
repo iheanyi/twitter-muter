@@ -19,12 +19,9 @@
     },
     methods: {
       addWord() {
-        if(this.inputWord.trim().length > 0) {
-          window.analytics.track('Add Word', {
-            word: this.inputWord.trim()
-          });
-
-          this.$store.dispatch('addWord', this.inputWord.trim());
+        const inputWord = this.inputWord.trim();
+        if(inputWord.length > 0) {
+          this.$store.dispatch('addWord', inputWord);
           this.inputWord = '';
         }
       }

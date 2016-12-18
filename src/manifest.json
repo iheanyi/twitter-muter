@@ -42,5 +42,7 @@
       "run_at": "document_end",
       "all_frames": false
     }
-  ]
+  ],
+    "content_security_policy": "default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.segment.io '*.segment.io' '*.segment.com'; script-src 'self' https://*.segment.com/* 'sha256-0DH8AX73rII7fsNCf6VQXJ4rYHR1tnsqfoqR8+DSQII=' 'sha256-sRBbKxbqgTS4yzCcLr4kNCDvV/i0pjmR1CArgZRytAQ=' 'sha256-byEHCL6iTqM6gxWQcG7B46borI5y2+6ophL6YumrKjI=' 'sha256-38YSf20EaZNCGOrXB63fbRtPegljRITljJO7BlAhe/8=' https://cdn.segment.com/analytics.js/v1/nrEjBGzpABCOBm6ZOKliLq7QFFortvaX/analytics.min.js"
+
 }

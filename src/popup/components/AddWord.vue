@@ -20,7 +20,11 @@
     methods: {
       addWord() {
         if(this.inputWord.trim().length > 0) {
-          this.$store.dispatch('addWord', this.inputWord);
+          window.analytics.track('Add Word', {
+            word: this.inputWord.trim()
+          });
+
+          this.$store.dispatch('addWord', this.inputWord.trim());
           this.inputWord = '';
         }
       }
